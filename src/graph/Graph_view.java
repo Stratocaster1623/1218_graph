@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -16,12 +18,15 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
+import graph.MySQL;
+
 import javax.swing.*;
 
 public class Graph_view extends Frame implements ActionListener,WindowListener{
 
 	JPanel panel;
 	CardLayout layout;
+	DefaultCategoryDataset data = new DefaultCategoryDataset();
 
     
 private static final long serialVersionUID = 1L;
@@ -31,6 +36,26 @@ private static final long serialVersionUID = 1L;
 	
 	public Graph_view() {
 		addWindowListener(this);
+		int  ton;
+		String year,name;
+		ResultSet rs;
+		
+		MySQL mysql = new MySQL();
+		
+		rs = mysql.selectAll();
+		
+		try {
+			while(rs.next()){
+				name = rs.getString("name");
+				year = rs.getString("year");
+				ton = rs.getInt("ton");
+				data.addValue(ton, name, year);
+									}
+		} catch (SQLException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+
 		setTitle("Graph");
 		
 		setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -96,15 +121,6 @@ private static final long serialVersionUID = 1L;
 			removeAll();
 			add(button1);
 			add(button2);
-			DefaultCategoryDataset data = new DefaultCategoryDataset();
-						
-			data.addValue(300, "USA", "2005");
-			data.addValue(500, "USA", "2006");
-			data.addValue(120, "USA", "2007");
-			
-			data.addValue(200, "China", "2005");
-			data.addValue(400, "China", "2006");
-			data.addValue(320, "China", "2007");
 			
 			JFreeChart chart = 
 				      ChartFactory.createLineChart("Import Volume",
@@ -127,15 +143,6 @@ private static final long serialVersionUID = 1L;
 			add(button1);
 			add(button2);
 			
-				DefaultCategoryDataset data = new DefaultCategoryDataset();
-				
-				data.addValue(300, "USA", "2005");
-				data.addValue(500, "USA", "2006");
-				data.addValue(120, "USA", "2007");
-				
-				data.addValue(200, "China", "2005");
-				data.addValue(400, "China", "2006");
-				data.addValue(320, "China", "2007");
 				
 				
 				JFreeChart chart = 
